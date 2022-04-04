@@ -4,7 +4,6 @@ import com.digipera.dto.SpendingHabit;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 public class SpendingHabitData {
@@ -23,14 +22,13 @@ public class SpendingHabitData {
         category.add("Sports");
         Random rand = new Random();
 
-//        for(int i=0; i<category.size(); i++){
-//            previousMonth.add(rand.nextInt(2550 - 1500) + 1500);
-//            currentMonth.add(rand.nextInt(2550 - 1520) + 1;520);
-//        }
+        for(int i=0; i<category.size(); i++){
+            previousMonth.add(rand.nextInt(2550 - 1500) + 1500);
+            currentMonth.add(rand.nextInt(2550 - 1520) + 1520);
+        }
     }
 
     public SpendingHabit getSpendingData(){
-        SpendingHabit data = new SpendingHabit(category, previousMonth, currentMonth);
-        return data;
+        return new SpendingHabit(category, previousMonth, currentMonth);
     }
 }
