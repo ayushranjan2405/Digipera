@@ -10,4 +10,11 @@
     <color name="button">#FF5269E6</color>
     <color name="icons">#FF5269E6</color>
     <color name="primary">#FF5269E6</color>
+    <color name="orange">#fb8500</color>
+    <color name="yellow">#ffb703</color>
+    <color name="dark_blue">#023047</color>
+    <color name="blue">#219ebc</color>
+    <color name="light_blue">#8ecae6</color>
+    <color name="green">#2a9d8f</color>
+    <color name="grey">#8d99ae</color>
 </resources>

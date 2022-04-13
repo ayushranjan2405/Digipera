@@ -1,8 +1,9 @@
 package com.digipera.views;
 
 import android.graphics.Color;
+import android.util.Log;
 
-import com.digipera.services.SpendingHabitService;
+import com.digipera.dto.ChartData;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -17,26 +18,23 @@ import java.util.List;
 
 public class BarChartView {
 
-    public static BarChart getBarChartView(BarChart barChart){
-        return new BarChartView().loadBarChart(barChart);
+    public static void getBarChartView(BarChart barChart, ChartData data){
+        new BarChartView().loadBarChart(barChart, data);
     }
 
-    public BarChart loadBarChart(BarChart barChart) {
+    private void loadBarChart(BarChart barChart, ChartData data) {
 
-        com.digipera.dto.SpendingHabit spendingHabitData = SpendingHabitService.getSpendingHabit();
-        List<String> categories = spendingHabitData.getCategory();
+        Log.i("Catogories: ", data.getCategories().toString());
+        Log.i("FirstBar: ", data.getFirstBar().toString());
 
-        List<BarEntry> prevMonthItems = getPrevMonthItems(spendingHabitData);
-        List<BarEntry> currMonthItems = getCurrMonthItems(spendingHabitData);
+        List<String> categories = data.getCategories();
+        List<BarEntry> firstBarItems = getfirstBarItems(data);
 
-        BarDataSet dataSet1 = new BarDataSet(prevMonthItems, "Previous Month");
-        decorateDataSet(dataSet1, Color.rgb(81, 128, 30));
+        BarDataSet dataSet1 = new BarDataSet(firstBarItems, data.getLabel());
+        decorateDataSet(dataSet1, data.getFirstBarColor());
 
-        BarDataSet dataSet2 = new BarDataSet(currMonthItems, "Current Month");
-        decorateDataSet(dataSet2, Color.rgb(128, 30, 32));
-
-        BarData data = new BarData(dataSet1, dataSet2);
-        decorateBarData(data);
+        BarData barData = new BarData(dataSet1);
+        decorateBarData(barData);
 
         XAxis xAxis = barChart.getXAxis();
         decorateXAxis(xAxis, categories);
@@ -44,10 +42,8 @@ public class BarChartView {
         Legend legend = barChart.getLegend();
         decorateLegends(legend);
 
-        barChart.setData(data);
-        decorateBarChart(barChart);
-        return barChart;
-
+        barChart.setData(barData);
+        decorateSingleBarChart(barChart);
     }
 
     private void decorateDataSet(BarDataSet dataSet1, int barColor) {
@@ -56,18 +52,12 @@ public class BarChartView {
         dataSet1.setValueTextColor(Color.WHITE);
     }
 
-    private List<BarEntry> getPrevMonthItems(com.digipera.dto.SpendingHabit spendingHabitData) {
-        List<String> categories = spendingHabitData.getCategory();
-        List<Integer> previousMonthData = spendingHabitData.getPreviousMonth();
-        List<BarEntry> items = getBarItems(categories, previousMonthData);
+    private List<BarEntry> getfirstBarItems(ChartData data) {
+        List<String> categories = data.getCategories();
+        List<Integer> previousMonthData = data.getFirstBar();
+        //List<BarEntry> items = getBarItems(categories, previousMonthData);
 
         return getBarItems(categories, previousMonthData);
-    }
-
-    private List<BarEntry> getCurrMonthItems(com.digipera.dto.SpendingHabit spendingHabitData) {
-        List<String> categories = spendingHabitData.getCategory();
-        List<Integer> currentMonthData = spendingHabitData.getCurrentMonth();
-        return getBarItems(categories, currentMonthData);
     }
 
     private List<BarEntry> getBarItems(List<String> categories, List<Integer> values) {
@@ -99,11 +89,11 @@ public class BarChartView {
 
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
-        xAxis.setDrawAxisLine(false);
+        xAxis.setDrawAxisLine(true);
         xAxis.setLabelCount(categories.size());
-        xAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+        xAxis.setAxisMinimum(-1.00f); // this replaces setStartAtZero(true)
         xAxis.setGranularity(1);
-        xAxis.setCenterAxisLabels(true);
+        //xAxis.setCenterAxisLabels(true);
         xAxis.setAxisMaximum(categories.size());
         xAxis.setTextColor(Color.WHITE);
         xAxis.setTextSize(14f);
@@ -121,15 +111,32 @@ public class BarChartView {
 
 
 
-    private void decorateBarChart(BarChart barChart) {
-        float groupSpace = 0.15f;
-        float barSpace = 0.01f; // x2 dataset
-        barChart.groupBars(0f, groupSpace, barSpace);
+//    private void decorateGroupBarChart(BarChart barChart) {
+//        float groupSpace = 0.15f;
+//        float barSpace = 0.01f; // x2 dataset
+//        barChart.groupBars(0f, groupSpace, barSpace);
+//        barChart.getAxisLeft().setTextColor(Color.WHITE);
+//        barChart.getAxisRight().setTextColor(Color.WHITE);
+//        barChart.getDescription().setTextColor(Color.WHITE);
+//        barChart.getDescription().setEnabled(false);
+//        barChart.setExtraBottomOffset(20f);
+//        barChart.setDrawValueAboveBar(false);
+//        barChart.setTouchEnabled(false);
+//        barChart.animateY(500);
+//        barChart.invalidate();
+//    }
+
+    private void decorateSingleBarChart(BarChart barChart) {
+        //float groupSpace = 0.15f;
+        //float barSpace = 0.01f; // x2 dataset
+        //barChart.groupBars(0f, groupSpace, barSpace);
         barChart.getAxisLeft().setTextColor(Color.WHITE);
         barChart.getAxisRight().setTextColor(Color.WHITE);
+        barChart.getAxisRight().setEnabled(false);
         barChart.getDescription().setTextColor(Color.WHITE);
         barChart.getDescription().setEnabled(false);
-        barChart.setExtraBottomOffset(20f);
+        barChart.setExtraBottomOffset(3f);
+       // barChart.setViewPortOffsets(10, 0, 0, 15);
         barChart.setDrawValueAboveBar(false);
         barChart.setTouchEnabled(false);
         barChart.animateY(500);

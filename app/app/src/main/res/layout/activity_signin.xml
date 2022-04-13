@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context=".activities.Signin"
-    android:backgroundTint="#30FFFFFF"
+    android:backgroundTint="#60000000"
     android:backgroundTintMode="src_over">
 
     <ImageView

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.digipera">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/wallet_logo_64"
@@ -10,8 +12,54 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Digipera">
         <activity
+            android:name=".activities.PaymentFailure"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.TransferSuccess"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.WalletHistory"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.Quiz"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.Rewards"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.Transfer"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.Fitness"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.ScreenTime"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.PaymentSuccess"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.PaymentConfirm"
+            android:exported="false"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.QRCodeScan"
+            android:exported="false"
+            android:hardwareAccelerated="false"
+            android:noHistory="true" />
+        <activity
             android:name=".activities.SpendingHabit"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true" />
         <activity
             android:name=".activities.DependentDashboard"
             android:exported="false" />
@@ -20,7 +68,8 @@
             android:exported="false" />
         <activity
             android:name=".activities.Signin"
-            android:exported="false" />
+            android:exported="false"
+            android:noHistory="true" />
         <activity
             android:name=".activities.Dashboard"
             android:exported="false" />

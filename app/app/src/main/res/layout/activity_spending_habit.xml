@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context=".activities.SpendingHabit"
-    android:backgroundTint="#30FFFFFF"
+    android:backgroundTint="#60000000"
     android:backgroundTintMode="src_over">
 
-    <!-- Header -->
     <include layout="@layout/header"/>
+
+<!--    <include layout="@layout/welcome_dependent_card" />-->
 
     <LinearLayout
         android:id="@+id/dependentData"
@@ -23,18 +24,26 @@
         android:layout_marginRight="10sp"
         android:gravity="left"
         android:orientation="vertical">
-        >
-
 
         <TextView
-            android:id="@+id/welcomeMessage"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
-            android:text="Spending Summary"
+            android:text="Ishita's Spending Summary"
             android:textColor="@color/white"
-            android:textSize="30dp"
+            android:textSize="25sp"
             android:textStyle="bold" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/units"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20sp"-->
+<!--            android:fontFamily="sans-serif-thin"-->
+<!--            android:text="in (Rupees)"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="20dp"/>-->
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/spending_chart"
@@ -42,7 +51,7 @@
             android:layout_height="400sp"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:layout_marginTop="40sp"
+            android:layout_marginTop="30sp"
             android:padding="10sp"/>
 
     </LinearLayout>

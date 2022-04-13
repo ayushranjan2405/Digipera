@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:backgroundTint="#60000000"
+    android:backgroundTintMode="src_over"
+    tools:context=".activities.PaymentConfirm">
+
+    <!-- Header -->
+    <include layout="@layout/header" />
+
+    <TextView
+        android:id="@+id/confirmMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginLeft="10sp"
+        android:layout_marginTop="60sp"
+        android:fontFamily="sans-serif-thin"
+        android:text="Please confirm payment to, "
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+
+    <LinearLayout
+        android:id="@+id/fitnessData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/confirmMessage"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="20sp"
+        android:background="@drawable/rounded_square_outlined"
+        android:gravity="left"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/merchantName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/confirmMessage"
+            android:layout_marginLeft="30sp"
+            android:layout_marginTop="40sp"
+            android:fontFamily="sans-serif-thin"
+            android:text="To: Ram Book Store "
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/merchantMobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/merchantName"
+            android:layout_marginLeft="30sp"
+            android:layout_marginTop="10sp"
+            android:fontFamily="sans-serif-thin"
+            android:text="Phone no: 996587538"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/merchantMobile"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="#30ffffff"
+            android:drawableLeft="@drawable/ic_baseline_currency_rupee_24"
+            android:drawablePadding="20dp"
+            android:hint="@string/hint_amount"
+            android:padding="20dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/amount"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="30dp"
+            android:backgroundTint="@color/primary"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/confirm"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:strokeColor="@color/primary"
+            app:strokeWidth="1sp" />
+    </LinearLayout>
+</RelativeLayout>

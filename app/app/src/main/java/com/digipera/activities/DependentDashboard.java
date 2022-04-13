@@ -2,8 +2,13 @@ package com.digipera.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,11 +36,88 @@ public class DependentDashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dependent_dashboard);
 
         User user = getSuppliedUser();
-        createWelcomeView(user);
-        createTimeView();
-        createAccountView(user);
-        createWidgetView();
-        createNotificationView(user);
+        addWelcomeView(user);
+        addTimeView();
+        addAccountView(user);
+        addWidgetView();
+        addNotificationView(user);
+        handleWidgetClick();
+        handleWidgetClick(findViewById(R.id.w_account_history), WalletHistory.class, user.getUsername());
+        handleWidgetClick(findViewById(R.id.w_scan_n_pay), QRCodeScan.class, user);
+        handleWidgetClick(findViewById(R.id.w_spending_habit), SpendingHabit.class, user);
+        handleWidgetClick(findViewById(R.id.w_activity), Fitness.class, user);
+        handleWidgetClick(findViewById(R.id.w_screen_activity), ScreenTime.class, user);
+        handleWidgetClick(findViewById(R.id.w_rewards), Rewards.class, user);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void handleWidgetClick(ImageView imageView, Class<?> nextActivityClass, User user) {
+        imageView.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    Log.i("IMAGE_TAP", "action_down");
+                    Intent intent = new Intent(getApplicationContext(), nextActivityClass);
+                    intent.putExtra(Constants.PERSON, user);
+                    startActivity(intent);
+                    break;
+                }
+                case MotionEvent.ACTION_CANCEL: {
+                    Log.i("IMAGE_TAP", "action_cancel");
+                    break;
+                }
+            }
+            return true;
+        });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void handleWidgetClick(ImageView imageView, Class<?> nextActivityClass, String username) {
+        imageView.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    Log.i("IMAGE_TAP", "action_down");
+                    Intent intent = new Intent(getApplicationContext(), nextActivityClass);
+                    intent.putExtra("name", username);
+                    startActivity(intent);
+                    break;
+                }
+                case MotionEvent.ACTION_CANCEL: {
+                    Log.i("IMAGE_TAP", "action_cancel");
+                    break;
+                }
+            }
+            return true;
+        });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void handleWidgetClick() {
+        final ImageView v = (ImageView) findViewById(R.id.w_scan_n_pay);
+        v.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    Log.i("IMAGE_TAP", "action_down");
+                    Intent intent = new Intent(getApplicationContext(), QRCodeScan.class);
+                    //intent.putExtra("user", user);
+                    startActivity(intent);
+                    break;
+                }
+                case MotionEvent.ACTION_CANCEL:{
+                    Log.i("IMAGE_TAP", "action_cancel");
+                    break;
+                }
+            }
+            return true;
+        });
     }
 
     private User getSuppliedUser() {
@@ -43,21 +125,21 @@ public class DependentDashboard extends AppCompatActivity {
         return (User) data.getParcelable("user");
     }
 
-    private void createWelcomeView(User user) {
+    private void addWelcomeView(User user) {
         TextView initials = (TextView) findViewById(R.id.initials);
         initials.setText(Formatter.getInitials(user));
         TextView welcomeMessage = (TextView) findViewById(R.id.welcomeMessage);
         welcomeMessage.setText(Formatter.getWelcomeMessage(user.getFirstname()));
     }
 
-    private void createTimeView() {
+    private void addTimeView() {
         TextView time = (TextView) findViewById(R.id.time);
         time.setText(DateTimeUtil.getSystemDate());
     }
 
-    private void createAccountView(User user) {
+    private void addAccountView(User user) {
         //Balance
-        Account account = AccountService.getAccount(user.getUsername());
+        Account account = new AccountService(this).getAccount(user.getUsername());
         TextView balance = (TextView) findViewById(R.id.balance);
         balance.setText(Formatter.getBalance(account.getBalance()));
 
@@ -66,7 +148,7 @@ public class DependentDashboard extends AppCompatActivity {
         rewards.setText(Formatter.getRewards(account.getRewardPoints()));
     }
 
-    private void createWidgetView() {
+    private void addWidgetView() {
 
         List<Widget> widgets = WidgetsService.getWidgets(Constants.DEPENDENT_DASHBOARD);
 
@@ -80,10 +162,10 @@ public class DependentDashboard extends AppCompatActivity {
         widgetViews2.forEach(widgetsLayout2::addView);
     }
 
-    private void createNotificationView(User user) {
+    private void addNotificationView(User user) {
         //Get the linear layout for notifications
         LinearLayout notificationsLayout = findViewById(R.id.notifications);
-        List<Notification> notifications = NotificationService.getNotifications(user.getUsername());
+        List<Notification> notifications = new NotificationService(DependentDashboard.this).getAll(user.getUsername());
         if(notifications!=null){
             List<View> views = NotificationView.getNotificationViews(this, notificationsLayout, notifications);
             views.forEach(notificationsLayout::addView);

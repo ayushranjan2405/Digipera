@@ -1,13 +1,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/notifications"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="350sp"
     android:layout_below="@id/widgets"
-    android:layout_marginTop="20sp"
-    android:layout_marginLeft="10sp"
-    android:layout_marginRight="10sp"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:padding="10sp"
+    android:layout_marginTop="30sp"
+    android:layout_marginLeft="5sp"
+    android:layout_marginRight="5sp"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:background="#30ffffff"
+    >
 
 </LinearLayout>

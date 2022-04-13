@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context=".activities.DependentDashboard"
-    android:backgroundTint="#30FFFFFF"
+    android:backgroundTint="#60000000"
     android:backgroundTintMode="src_over">
 
     <LinearLayout
@@ -67,7 +67,7 @@
 
             <TextView
                 android:id="@+id/balance"
-                android:layout_width="250sp"
+                android:layout_width="240sp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10sp"
                 android:layout_marginRight="20sp"

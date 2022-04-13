@@ -2,10 +2,13 @@ package com.digipera.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,39 +41,86 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         User user = getSuppliedUser();
-        createWelcomeView(user);
-        createTimeView();
-        createAccountView(user);
-        createCardView();
-        createWidgetView();
-        createNotificationView(user);
-
+        Account account = new AccountService(this).getAccount(user.getUsername());
+        addWelcomeView(user);
+        addTimeView();
+        addAccountView(account);
+        addCardView();
+        addWidgetView();
+        addNotificationView(user);
+        handleWidgetClick(findViewById(R.id.w_transfer_money), Transfer.class, account);
+        handleWidgetClick(findViewById(R.id.w_account_history), WalletHistory.class, account.getHolderName());
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private void handleWidgetClick(ImageView imageView, Class<?> nextActivityClass, Account account) {
+        imageView.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    Log.i("IMAGE_TAP", "action_down");
+                    Intent intent = new Intent(getApplicationContext(), nextActivityClass);
+                    intent.putExtra(Constants.ACCOUNT, account);
+                    startActivity(intent);
+                    break;
+                }
+                case MotionEvent.ACTION_CANCEL: {
+                    Log.i("IMAGE_TAP", "action_cancel");
+                    break;
+                }
+            }
+            return true;
+        });
+    }
 
-    private void createWelcomeView(User user) {
-        TextView initials = (TextView) findViewById(R.id.initials);
+    @SuppressLint("ClickableViewAccessibility")
+    private void handleWidgetClick(ImageView imageView, Class<?> nextActivityClass, String name) {
+        imageView.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    Log.i("IMAGE_TAP", "action_down");
+                    Intent intent = new Intent(getApplicationContext(), nextActivityClass);
+                    intent.putExtra("name", name);
+                    startActivity(intent);
+                    break;
+                }
+                case MotionEvent.ACTION_CANCEL: {
+                    Log.i("IMAGE_TAP", "action_cancel");
+                    break;
+                }
+            }
+            return true;
+        });
+    }
+
+    private void addWelcomeView(User user) {
+        TextView initials = findViewById(R.id.initials);
         initials.setText(Formatter.getInitials(user));
 
-        TextView welcomeMessage = (TextView) findViewById(R.id.welcomeMessage);
+        TextView welcomeMessage = findViewById(R.id.welcomeMessage);
         welcomeMessage.setText(Formatter.getWelcomeMessage(user.getFirstname()));
     }
 
-    private void createTimeView() {
-        TextView time = (TextView) findViewById(R.id.time);
+    private void addTimeView() {
+        TextView time = findViewById(R.id.time);
         time.setText(DateTimeUtil.getSystemDate());
     }
 
-    private void createAccountView(User user) {
+    private void addAccountView(Account account) {
         //Balance
-        Account account = AccountService.getAccount(user.getUsername());
-        TextView balance = (TextView) findViewById(R.id.balance);
+        TextView balance = findViewById(R.id.balance);
         balance.setText(Formatter.getBalance(account.getBalance()));
-
     }
 
-    private void createCardView() {
+    private void addCardView() {
 
         SwipeDeck cardStack;
         List<Dependent> dependentList;
@@ -78,17 +128,17 @@ public class Dashboard extends AppCompatActivity {
         cardStack = findViewById(R.id.swipe_deck);
 
         // on below line we are adding data to our array list.
-        dependentList = DependentService.getAllDependents();
+        dependentList = DependentService.getInflatedDependents(Dashboard.this);
 
         // on below line we are creating a variable for our adapter class and passing array list to it.
-        final DeckAdapter adapter = new DeckAdapter(dependentList, this);
+        final DeckAdapter adapter = new DeckAdapter(dependentList);
 
         // on below line we are setting adapter to our card stack.
         cardStack.setAdapter(adapter);
         setEventCallback2CardStack(cardStack, dependentList);
     }
 
-    private void createWidgetView() {
+    private void addWidgetView() {
 
         List<Widget> widgets = WidgetsService.getWidgets(Constants.PARENT);
 
@@ -98,17 +148,17 @@ public class Dashboard extends AppCompatActivity {
         widgetViews.forEach(widgetsLayout::addView);
     }
 
-    private void createNotificationView(User user) {
+    private void addNotificationView(User user) {
         //Get the linear layout for notifications
         LinearLayout notificationsLayout = findViewById(R.id.notifications);
-        List<Notification> notifications = NotificationService.getNotifications(user.getUsername());
+        List<Notification> notifications = new NotificationService(Dashboard.this).getAll(user.getUsername());
         List<View> views = NotificationView.getNotificationViews(this, notificationsLayout, notifications);
         views.forEach(notificationsLayout::addView);
     }
 
     private User getSuppliedUser() {
         Bundle data = getIntent().getExtras();
-        return (User) data.getParcelable("user");
+        return data.getParcelable("user");
     }
 
     private void setEventCallback2CardStack(SwipeDeck cardStack, List<Dependent> dependentList) {
@@ -123,8 +173,8 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void cardSwipedRight(int position) {
                 // on card swiped to right we are displaying a toast message.
-                TextView dependentName = (TextView) findViewById(R.id.dependentName);
-                //TextView password = (TextView) findViewById(R.id.password);
+                TextView dependentName = findViewById(R.id.dependentName);
+                //TextView password = findViewById(R.id.password);
                 Log.i("NAME", position + dependentName.getText().toString());
                 Intent intent = new Intent(getApplicationContext(), DependentDetails.class);
                 intent.putExtra("dependent", dependentList.get(position));

@@ -1,6 +1,5 @@
 package com.digipera.utils;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -21,13 +20,11 @@ public class DeckAdapter extends BaseAdapter {
 
     // on below line we have created variables
     // for our array list and context.
-    private List<Dependent> dependents;
-    private Context context;
+    private final List<Dependent> dependents;
 
     // on below line we have created constructor for our variables.
-    public DeckAdapter(List<Dependent> dependents, Context context) {
+    public DeckAdapter(List<Dependent> dependents) {
         this.dependents = dependents;
-        this.context = context;
     }
 
     @Override
@@ -59,8 +56,8 @@ public class DeckAdapter extends BaseAdapter {
         ((CardView) v.findViewById(R.id.dependentCard)).setBackgroundTintList(getRandomColor(position));
         // on below line we are initializing our variables and setting data to our variables.
         ((TextView) v.findViewById(R.id.dependentName)).setText(dependents.get(position).getFirstname());
-        ((TextView) v.findViewById(R.id.balance)).setText(getBalance(dependents.get(position).getBalance()));
-        ((TextView) v.findViewById(R.id.reward)).setText(getRewards(dependents.get(position).getRewardPoints()));
+        ((TextView) v.findViewById(R.id.balance)).setText(getBalance(Float.toString(dependents.get(position).getBalance())));
+        ((TextView) v.findViewById(R.id.reward)).setText(getRewards(Integer.toString(dependents.get(position).getRewardPoints())));
         ((TextView) v.findViewById(R.id.initials)).setText(getInitials(dependents.get(position)));
         return v;
     }
@@ -74,7 +71,7 @@ public class DeckAdapter extends BaseAdapter {
     }
 
     private String getInitials(Dependent dependent) {
-        return dependent.getFirstname().substring(0, 1) + dependent.getLastname().substring(0, 1);
+        return Formatter.getInitials(dependent);
     }
 
     private ColorStateList getRandomColor(int position) {
@@ -82,7 +79,7 @@ public class DeckAdapter extends BaseAdapter {
     }
 
     private String getColor(int i) {
-        String[] colors = {String.format("#%06X", (0xFFFFFF & R.color.primary)), "#51801e"};
+        String[] colors = {"#1e81b0", "#e28743"};
         if (i >= 2) {
             i = i % 2;
         }

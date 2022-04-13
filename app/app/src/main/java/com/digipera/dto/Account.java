@@ -1,49 +1,95 @@
 package com.digipera.dto;
 
-public class Account {
+import android.os.Parcel;
+import android.os.Parcelable;
 
-    private final String balance;
-    private final String rewardPoints;
-    private final String dailyScreenTime;
-    private final String dailyActivityTime;
-    private final String relation;
+public class Account implements Parcelable {
 
-    public Account(String balance, String rewardPoints, String dailyScreenTime, String dailyActivityTime, String relation) {
+    private final String holderName;
+    private final float balance;
+    private final int rewardPoints;
+    private final int dailyScreenTimeInMinutes;
+    private final int dailyActivityTimeInMinutes;
+    private final String userType;
+
+    public Account(String holderName, float balance, int rewardPoints, int dailyScreenTimeInMinutes, int dailyActivityTimeInMinutes, String userType) {
+        this.holderName = holderName;
         this.balance = balance;
         this.rewardPoints = rewardPoints;
-        this.dailyScreenTime = dailyScreenTime;
-        this.dailyActivityTime = dailyActivityTime;
-        this.relation = relation;
+        this.dailyScreenTimeInMinutes = dailyScreenTimeInMinutes;
+        this.dailyActivityTimeInMinutes = dailyActivityTimeInMinutes;
+        this.userType = userType;
     }
 
-    public String getBalance() {
+    protected Account(Parcel in) {
+        holderName = in.readString();
+        balance = in.readFloat();
+        rewardPoints = in.readInt();
+        dailyScreenTimeInMinutes = in.readInt();
+        dailyActivityTimeInMinutes = in.readInt();
+        userType = in.readString();
+    }
+
+    public static final Creator<Account> CREATOR = new Creator<>() {
+        @Override
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
+
+    public String getHolderName() {
+        return holderName;
+    }
+
+    public float getBalance() {
         return balance;
     }
 
-    public String getRewardPoints() {
+    public int getRewardPoints() {
         return rewardPoints;
     }
 
-    public String getDailyScreenTime() {
-        return dailyScreenTime;
+    public int getDailyScreenTimeInMinutes() {
+        return dailyScreenTimeInMinutes;
     }
 
-    public String getDailyActivityTime() {
-        return dailyActivityTime;
+    public int getDailyActivityTimeInMinutes() {
+        return dailyActivityTimeInMinutes;
     }
 
-    public String getRelation() {
-        return relation;
+    public String getUserType() {
+        return userType;
     }
 
     @Override
     public String toString() {
         return "Account{" +
-                "balance='" + balance + '\'' +
-                ", rewardPoints='" + rewardPoints + '\'' +
-                ", dailyScreenTime='" + dailyScreenTime + '\'' +
-                ", dailyActivityTime='" + dailyActivityTime + '\'' +
-                ", relation='" + relation + '\'' +
+                "holderName='" + holderName + '\'' +
+                ", balance=" + balance +
+                ", rewardPoints=" + rewardPoints +
+                ", dailyScreenTimeInMinutes=" + dailyScreenTimeInMinutes +
+                ", dailyActivityTimeInMinutes=" + dailyActivityTimeInMinutes +
+                ", userType='" + userType + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(holderName);
+        parcel.writeFloat(balance);
+        parcel.writeInt(rewardPoints);
+        parcel.writeInt(dailyScreenTimeInMinutes);
+        parcel.writeInt(dailyActivityTimeInMinutes);
+        parcel.writeString(userType);
     }
 }

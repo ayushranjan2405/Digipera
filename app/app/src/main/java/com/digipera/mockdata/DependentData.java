@@ -1,22 +1,42 @@
 package com.digipera.mockdata;
 
+import com.digipera.commons.Constants;
+import com.digipera.dto.Account;
 import com.digipera.dto.Dependent;
-import com.digipera.dto.User;
+import com.digipera.services.AccountService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DependentData {
 
-    private Map<String, Dependent> dependents;
+    private final Map<String, Dependent> dependents;
+    private final AccountService accountService;
 
-    public DependentData() {
+    public DependentData(AccountService accountService) {
         dependents = new HashMap<>();
-        dependents.put("ishita",new Dependent("Ishita", "Singh", "1000.00", "50"));
-        dependents.put("rohan", new Dependent("Rohan", "Singh", "2000.00", "60"));
+        this.accountService = accountService;
+        dependents.put(Constants.ISHITA_USERNAME, getDependent(Constants.ISHITA_USERNAME, Constants.ISHITA_FIRSTNAME, Constants.ISHITA_LASTNAME));
+        dependents.put(Constants.ROHAN_USERNAME, getDependent(Constants.ROHAN_USERNAME, Constants.ROHAN_FIRSTNAME, Constants.ROHAN_LASTNAME));
     }
 
-    public Map<String, Dependent> getDependents(){
-        return dependents;
+    public List<Dependent> getDependents() {
+        return new ArrayList<>(dependents.values());
+    }
+
+    public List<String> getDependentNames() {
+
+        return dependents.values()
+                .stream()
+                .map(Dependent::getFirstname)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private Dependent getDependent(String username, String firstName, String lastName) {
+        Account account = accountService.getAccount(username);
+        return new Dependent(firstName, lastName, account.getBalance(), account.getRewardPoints());
     }
 }

@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class User implements Parcelable {
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<>() {
 
         @Override
         public User createFromParcel(Parcel in) {
@@ -18,11 +18,11 @@ public class User implements Parcelable {
         }
     };
 
-    private String username;
-    private String firstname;
-    private String lastname;
-    private String age;
-    private String relation;
+    private final String username;
+    private final String firstname;
+    private final String lastname;
+    private final String age;
+    private final String relation;
 
     public User(String username, String firstname, String lastname, String age, String relation) {
         this.username = username;
@@ -36,40 +36,20 @@ public class User implements Parcelable {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getFirstname() {
         return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
     }
 
     public String getLastname() {
         return lastname;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
     public String getAge() {
         return age;
     }
 
-    public void setAge(String age) {
-        this.age = age;
-    }
-
     public String getRelation() {
         return relation;
-    }
-
-    public void setRelation(String relation) {
-        this.relation = relation;
     }
 
     protected User(Parcel in) {
