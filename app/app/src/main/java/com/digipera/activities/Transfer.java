@@ -2,6 +2,7 @@ package com.digipera.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
@@ -73,25 +74,27 @@ public class Transfer extends AppCompatActivity {
             //AccountService accountService = new AccountService(AppRepo.getAppRepo(Transfer.this));
             //Account formAccount = account;
             Account toAccount = new AccountService(Transfer.this).getAccount(selectedText.getText().toString());
-            credit(fromAccHolderName, selectedText.getText().toString(), Float.toString(account.getBalance()), amount.getText().toString());
-            debit(fromAccHolderName, selectedText.getText().toString(), Float.toString(toAccount.getBalance()), amount.getText().toString());
+            credit(fromAccHolderName, selectedText.getText().toString(), Float.toString(toAccount.getBalance()), amount.getText().toString());
+            debit(fromAccHolderName, selectedText.getText().toString(), Float.toString(account.getBalance()), amount.getText().toString());
             nextScreen(selectedText.getText().toString(), Float.parseFloat(amount.getText().toString()), account.getBalance());
         });
     }
 
     private void debit(String from, String to, String currentBalance, String delta) {
-        float newBalance = Float.parseFloat(currentBalance) + Float.parseFloat(delta);
+        float newBalance = Float.parseFloat(currentBalance) - Float.parseFloat(delta);
         updateBalance(from, newBalance);
         createNotification(from, to, from, delta, Constants.DEBIT);
     }
 
     private void credit(String from, String to, String currentBalance, String delta) {
-        float newBalance = Float.parseFloat(currentBalance) - Float.parseFloat(delta);
+        float newBalance = Float.parseFloat(currentBalance) + Float.parseFloat(delta);
         updateBalance(to, newBalance);
         createNotification(from, to, to, delta, Constants.CREDIT);
     }
 
     private void updateBalance(String accountHolder, float balance) {
+        Log.i("Account_transfer", accountHolder);
+        Log.i("Account_transfer", ""+balance);
         AccountService accountService = new AccountService(Transfer.this);
         accountService.updateAccountBalance(accountHolder, balance);
     }

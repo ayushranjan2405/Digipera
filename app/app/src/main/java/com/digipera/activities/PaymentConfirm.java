@@ -43,7 +43,7 @@ public class PaymentConfirm extends AppCompatActivity {
     }
 
     private void debit(String from, String to, String currentBalance, String delta) {
-        float newBalance = Float.parseFloat(currentBalance) + Float.parseFloat(delta);
+        float newBalance = Float.parseFloat(currentBalance) - Float.parseFloat(delta);
         updateBalance(from, newBalance);
         createNotification(from, to, from, delta);
     }

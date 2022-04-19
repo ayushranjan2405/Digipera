@@ -11,7 +11,7 @@ public class SellerData {
 
     public SellerData(){
         this.merchantTable = new HashMap<>();
-        merchantTable.put("9999999999", new Seller("Book shop", "9999999999","SHDS888989"));
+        merchantTable.put("9945800388", new Seller("Sapna Book Shop", "9945800388","SHDS888989"));
 
     }
     public Seller getData(String phoneNumber) {

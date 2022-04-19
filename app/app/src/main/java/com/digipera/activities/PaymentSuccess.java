@@ -32,7 +32,7 @@ public class PaymentSuccess extends AppCompatActivity {
         amount.setText(Constants.AMOUNT + payment.getAmount());
 
         TextView transactionId = findViewById(R.id.transactionId);
-        transactionId.setText(Constants.TRX + "1111111122222");
+        transactionId.setText(Constants.TRX + "9871165924372");
 
         TextView time = findViewById(R.id.transaction_time);
         time.setText(Constants.TIME +DateTimeUtil.getSystemDate());
